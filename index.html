@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimelapsePVP - Official Server & Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-glow"></div>
+
+    <!-- Header / Navigation -->
+    <header>
+        <div class="logo">
+            <a href="index.html" class="logo-link">
+                <img src="https://i.postimg.cc/4407Tvk8/Timelape-Pv-P-Transparant-BG.png" alt="TimelapsePVP Emblem" class="nav-logo">
+                <span class="logo-text">TIMELAPSE<span class="logo-tag">PVP</span></span>
+            </a>
+        </div>
+        <nav>
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="status.html" class="nav-link">Status</a>
+            <a href="team.html" class="nav-link">Team</a>
+            <a href="https://discord.gg/eNEbkYjQvQ" target="_blank" class="nav-link">Discord</a>
+            <a href="login.html" class="btn-staff"><i class="fa-solid fa-shield-halved"></i> Staff Portal</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-banner-container">
+                <img src="https://i.postimg.cc/dQfkKRcK/Tz-N-Banner.png" alt="Timelapsez Network Banner" class="hero-banner-img">
+            </div>
+
+            <div class="badge">BY TIMELAPSEZ</div>
+            <h1>DOMINATE THE <span class="highlight">ARENA</span></h1>
+            <p class="subtitle">Welcome to TimelapsePVP — the ultimate cross-play Minecraft Bedrock experience.</p>
+
+            <!-- Server IP Card -->
+            <div class="server-card">
+                <div class="server-details">
+                    <div class="detail-item">
+                        <span class="label">Server IP</span>
+                        <span class="value" id="ip-text">timelapsepvp.verixen.com</span>
+                    </div>
+                    <div class="detail-divider"></div>
+                    <div class="detail-item">
+                        <span class="label">Port</span>
+                        <span class="value">19132</span>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copyIP()">
+                    <i class="fa-regular fa-copy"></i> Copy IP
+                </button>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="https://discord.gg/eNEbkYjQvQ" class="cta-btn primary" target="_blank">
+                    <i class="fa-brands fa-discord"></i> Join Timelapsez Network Discord
+                </a>
+            </div>
+        </section>
+
+        <!-- About / Features Section -->
+        <section class="features-section">
+            <div class="section-title">
+                <h2>WHY PLAY ON <span class="highlight">TIMELAPSEPVP</span>?</h2>
+                <p>Designed to deliver the best competitive environment for Bedrock players.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-khanda"></i>
+                    </div>
+                    <h3>Intense PVP Combat</h3>
+                    <p>Test your skills in custom-built arenas configured for fast-paced action, smooth hit-registration, and competitive fights designed to push your limits.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <h3>Timelapsez Network</h3>
+                    <p>Part of a larger gaming ecosystem. Connect with a massive community of players across the globe, trade items, and build your legacy together.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3>Fair & Optimized</h3>
+                    <p>Experience zero-lag gameplay with top-tier server performance, advanced anti-cheat protection, and active staff moderation around the clock.</p>
+                </div>
+            </div>
+        </section> 
+
+        <!-- Community Callout Section -->
+        <section class="community-section">
+            <div class="community-content">
+                <h2>JOIN OUR GROWING <span class="highlight">COMMUNITY</span></h2>
+                <p>Connect with other players, find a faction or clan, report bugs, and chat directly with our staff team on our official Discord server.</p>
+                <a href="https://discord.gg/eNEbkYjQvQ" target="_blank" class="cta-btn primary">
+                    <i class="fa-brands fa-discord"></i> Join Discord Server
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Copy IP Script
+        function copyIP() {
+            const ip = document.getElementById("ip-text").innerText;
+            navigator.clipboard.writeText(ip).then(() => {
+                alert("Server IP copied to clipboard: " + ip);
+            });
+        }
+
+        // Scroll animations
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll(".feature-card").forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

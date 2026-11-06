@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimelapsePVP - Staff Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://i.postimg.cc/4407Tvk8/Timelape-Pv-P-Transparant-BG.png" alt="TimelapsePVP Logo" class="nav-logo">
+                <span class="logo-text">TIMELAPSE<span class="logo-tag highlight">PVP</span></span>
+            </div>
+
+            <nav class="sidebar-menu">
+                <span class="menu-category">Staff Hub</span>
+                <a href="#" class="menu-item active" onclick="switchTab('home', this)">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="#" class="menu-item" onclick="switchTab('messages', this)">
+                    <i class="fa-solid fa-envelope"></i> Messages
+                </a>
+                <a href="#" class="menu-item" onclick="switchTab('announcements', this)">
+                    <i class="fa-solid fa-bullhorn"></i> Announcements
+                </a>
+                <a href="#" class="menu-item" onclick="switchTab('tasks', this)">
+                    <i class="fa-solid fa-list-check"></i> Tasks
+                </a>
+                <a href="#" class="menu-item" onclick="switchTab('calendar', this)">
+                    <i class="fa-solid fa-calendar-days"></i> Calendar
+                </a>
+                <a href="#" class="menu-item" onclick="switchTab('notices', this)">
+                    <i class="fa-solid fa-user-clock"></i> Notices
+                </a>
+                <a href="#" class="menu-item" onclick="switchTab('docs', this)">
+                    <i class="fa-solid fa-folder-open"></i> Docs
+                </a>
+                <a href="#" class="menu-item" onclick="switchTab('profile', this)">
+                    <i class="fa-solid fa-user"></i> My Profile
+                </a>
+
+                <!-- Beveiligde Admin Sectie -->
+                <div id="adminSection" style="display: none;">
+                    <span class="menu-category">Administration</span>
+                    <a href="#" class="menu-item" onclick="switchTab('admin-staff', this)">
+                        <i class="fa-solid fa-users-gear"></i> Staff Accounts
+                    </a>
+                    <a href="#" class="menu-item" onclick="switchTab('admin-bot', this)">
+                        <i class="fa-solid fa-robot"></i> Discord Bot Hub
+                    </a>
+                    <a href="#" class="menu-item" onclick="switchTab('admin-logs', this)">
+                        <i class="fa-solid fa-clipboard-list"></i> Logs
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-content">
+            <header class="content-header">
+                <div>
+                    <h2 class="welcome-heading">Welcome back, <span id="welcomeUser" class="highlight">Staff</span> 👋</h2>
+                    <p class="welcome-subtext">Here is what is happening across the TimelapsePVP Network today.</p>
+                </div>
+                <a href="index.html" class="cta-btn secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Return to Site
+                </a>
+            </header>
+
+            <div class="content-body">
+
+                <!-- 1. HOME TAB -->
+                <div id="tab-home" class="tab-content">
+                    <div class="glass-card">
+                        <h3><i class="fa-solid fa-wand-magic-sparkles highlight"></i> Overview Dashboard</h3>
+                        <p style="margin-top: 8px; color: var(--text-muted);">Manage your active tasks, view team notices, or update your staff profile.</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon online"><i class="fa-solid fa-circle"></i></div>
+                            <div>
+                                <span class="stat-label">Network Status</span>
+                                <span class="stat-value">Online & Operational</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><i class="fa-solid fa-users"></i></div>
+                            <div>
+                                <span class="stat-label">Total Staff</span>
+                                <span class="stat-value" id="widgetStaffCount">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple"><i class="fa-solid fa-inbox"></i></div>
+                            <div>
+                                <span class="stat-label">Inbox</span>
+                                <span class="stat-value" id="widgetMsgCount">0 Messages</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. MESSAGES TAB -->
+                <div id="tab-messages" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-envelope"></i> Internal Messages</h3>
+                    </div>
+                    <div class="glass-card table-wrapper">
+                        <div style="padding: 24px; color: var(--text-muted);">No new messages in your inbox.</div>
+                    </div>
+                </div>
+
+                <!-- 3. ANNOUNCEMENTS TAB -->
+                <div id="tab-announcements" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-bullhorn"></i> Team Announcements</h3>
+                        <button class="cta-btn primary admin-only" style="display: none;" onclick="toggleAnnouncementModal(true)">
+                            <i class="fa-solid fa-plus"></i> Post Announcement
+                        </button>
+                    </div>
+                    <div id="announcementsContainer"></div>
+                </div>
+
+                <!-- 4. TASKS TAB -->
+                <div id="tab-tasks" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-list-check"></i> Tasks</h3>
+                        <button class="cta-btn primary admin-only" style="display: none;" onclick="toggleTaskModal(true)">
+                            <i class="fa-solid fa-plus"></i> Assign Task
+                        </button>
+                    </div>
+                    <div class="tasks-grid" id="tasksGrid"></div>
+                </div>
+
+                <!-- 5. CALENDAR TAB -->
+                <div id="tab-calendar" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-calendar-days"></i> Network Calendar</h3>
+                    </div>
+                    <div class="glass-card">
+                        <p style="color: var(--text-muted);">No scheduled events for this week.</p>
+                    </div>
+                </div>
+
+                <!-- 6. NOTICES (ABSENCE) TAB -->
+                <div id="tab-notices" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-user-clock"></i> Staff Absences & Notices</h3>
+                        <button class="cta-btn primary" onclick="toggleNoticeModal(true)">
+                            <i class="fa-solid fa-plus"></i> Submit Notice
+                        </button>
+                    </div>
+                    <div class="glass-card table-wrapper">
+                        <table class="soft-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff Member</th>
+                                    <th>Reason</th>
+                                    <th>Period</th>
+                                    <th>Details</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="noticesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 7. DOCS TAB -->
+                <div id="tab-docs" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-folder-open"></i> Documents & Guides</h3>
+                        <button class="cta-btn primary admin-only" id="uploadDocBtn" style="display: none;" onclick="toggleDocModal(true)">
+                            <i class="fa-solid fa-upload"></i> Upload Guide
+                        </button>
+                    </div>
+                    <div class="glass-card table-wrapper">
+                        <table class="soft-table">
+                            <thead>
+                                <tr>
+                                    <th>Document Title</th>
+                                    <th>Category</th>
+                                    <th>Uploaded By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="docsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 8. MY PROFILE TAB -->
+                <div id="tab-profile" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-user"></i> Profile Settings</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 320px 1fr; gap: 32px;">
+                        <div class="glass-card" style="text-align: center;">
+                            <div class="avatar-hover-wrapper" onclick="triggerAvatarUpload()">
+                                <img id="profileAvatarImg" src="https://i.postimg.cc/4407Tvk8/Timelape-Pv-P-Transparant-BG.png" alt="Avatar">
+                                <div class="avatar-overlay"><i class="fa-solid fa-pen"></i></div>
+                            </div>
+                            <input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+                            
+                            <h4 id="profUserCard">Username</h4>
+                            <p class="soft-pill orange" id="profRoleBadge" style="display: inline-block; margin-top: 8px;">Role</p>
+                        </div>
+
+                        <div class="glass-card">
+                            <h4 style="margin-bottom: 24px;"><i class="fa-solid fa-id-card"></i> Personnel Details</h4>
+                            <form id="profileInfoForm" onsubmit="saveProfileDetails(event)">
+                                <div class="form-group">
+                                    <label>Birthday:</label>
+                                    <input type="date" id="profileBirthday" class="soft-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Department:</label>
+                                    <input type="text" id="profileDept" class="soft-input" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Join Date:</label>
+                                    <input type="text" id="profileJoinDate" class="soft-input" readonly style="color: var(--text-muted);">
+                                </div>
+                                <button type="submit" class="cta-btn primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. ADMIN: STAFF MANAGEMENT -->
+                <div id="tab-admin-staff" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-users-gear"></i> Manage Staff Accounts</h3>
+                        <button class="cta-btn primary" onclick="toggleAddUserModal(true)">
+                            <i class="fa-solid fa-user-plus"></i> New Account
+                        </button>
+                    </div>
+                    <div class="glass-card table-wrapper">
+                        <table class="soft-table">
+                            <thead>
+                                <tr><th>Member</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody id="staffTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 10. ADMIN: DISCORD BOT HUB -->
+                <div id="tab-admin-bot" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-robot"></i> Discord Bot Control Center</h3>
+                    </div>
+
+                    <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <div>
+                            <h4 style="margin-bottom: 6px;">TimelapseZ Bot Status</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Manage the live state and active modules of your Discord bot.</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <span class="soft-pill blue" id="botStatusIndicator"><i class="fa-solid fa-circle" style="font-size: 0.6rem;"></i> Connected</span>
+                            <button class="cta-btn success-soft" onclick="controlBot('start')"><i class="fa-solid fa-play"></i> Start Bot</button>
+                            <button class="cta-btn danger-soft" onclick="controlBot('stop')"><i class="fa-solid fa-power-off"></i> Stop Bot</button>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 24px;">
+                        <div class="glass-card" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <h4><i class="fa-solid fa-ticket"></i> Tickets Module</h4>
+                                <span class="soft-pill orange" id="status-tickets">Active</span>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Handles player support tickets and automated channel creation.</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="cta-btn primary" style="flex: 1; justify-content: center;" onclick="toggleModule('tickets', true)">Enable</button>
+                                <button class="cta-btn secondary" style="flex: 1; justify-content: center;" onclick="toggleModule('tickets', false)">Disable</button>
+                            </div>
+                        </div>
+
+                        <div class="glass-card" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <h4><i class="fa-solid fa-user-check"></i> Verification Module</h4>
+                                <span class="soft-pill orange" id="status-verification">Active</span>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Manages Bedrock & Discord account linking and automatic roles.</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="cta-btn primary" style="flex: 1; justify-content: center;" onclick="toggleModule('verification', true)">Enable</button>
+                                <button class="cta-btn secondary" style="flex: 1; justify-content: center;" onclick="toggleModule('verification', false)">Disable</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h4 style="margin-bottom: 16px;"><i class="fa-solid fa-paper-plane"></i> Send Announcement via Bot</h4>
+                        <form onsubmit="sendBotMessage(event)">
+                            <div class="form-group">
+                                <label>Discord Channel ID:</label>
+                                <input type="text" id="botChannelId" class="soft-input" placeholder="e.g. 1192837465543210" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Message Content:</label>
+                                <textarea id="botMessageContent" class="soft-input" rows="4" placeholder="Type the announcement message the bot will post..." required></textarea>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button type="submit" class="cta-btn primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Send via Bot</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 11. ADMIN: LOGS -->
+                <div id="tab-admin-logs" class="tab-content" style="display: none;">
+                    <div class="tab-topbar">
+                        <h3><i class="fa-solid fa-clipboard-list"></i> System Logs</h3>
+                    </div>
+                    <div class="glass-card">
+                        <p style="color: var(--text-muted);">System operations and administrative actions logged here.</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         ALLE MODALS (VOLLEDIG UITGESCHREVEN)
+         ========================================== -->
+
+    <!-- 1. MODAL: ABSENCE NOTICE -->
+    <div class="modal-overlay" id="noticeModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-clock"></i> Submit Staff Notice</h3>
+                <button class="action-btn" onclick="toggleNoticeModal(false)">&times;</button>
+            </div>
+            <form onsubmit="handleAddNotice(event)">
+                <div class="form-group">
+                    <label>Notice Type:</label>
+                    <select id="noticeType" class="soft-input" required>
+                        <option value="Vacation">Vacation / Holiday</option>
+                        <option value="Exams">School / Exams</option>
+                        <option value="Personal">Personal Reasons</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label>Start Date:</label>
+                        <input type="date" id="noticeStartDate" class="soft-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date:</label>
+                        <input type="date" id="noticeEndDate" class="soft-input" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Reason / Details:</label>
+                    <textarea id="noticeDesc" class="soft-input" rows="3" placeholder="Briefly explain your absence..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cta-btn secondary" onclick="toggleNoticeModal(false)">Cancel</button>
+                    <button type="submit" class="cta-btn primary">Submit Notice</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. MODAL: UPLOAD DOCUMENT (Admin Only) -->
+    <div class="modal-overlay" id="docModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-arrow-up"></i> Upload Staff Document</h3>
+                <button class="action-btn" onclick="toggleDocModal(false)">&times;</button>
+            </div>
+            <form id="uploadDocForm" onsubmit="handleUploadDoc(event)">
+                <div class="form-group">
+                    <label>Document Title:</label>
+                    <input type="text" id="docTitle" class="soft-input" required placeholder="e.g. Punishment Grid v2">
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    <select id="docCategory" class="soft-input">
+                        <option value="Handbook">Handbook</option>
+                        <option value="Rules">Rules</option>
+                        <option value="Guide">Guide</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select File:</label>
+                    <input type="file" id="docFileInput" class="soft-input" required onchange="handleDocFileSelect(event)">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cta-btn secondary" onclick="toggleDocModal(false)">Cancel</button>
+                    <button type="submit" class="cta-btn primary">Upload Document</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MODAL: POST ANNOUNCEMENT (Admin Only) -->
+    <div class="modal-overlay" id="announcementModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-bullhorn"></i> New Announcement</h3>
+                <button class="action-btn" onclick="toggleAnnouncementModal(false)">&times;</button>
+            </div>
+            <form onsubmit="handleAddAnnouncement(event)">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" id="annTitle" class="soft-input" placeholder="e.g. Staff Meeting This Saturday" required>
+                </div>
+                <div class="form-group">
+                    <label>Category / Priority:</label>
+                    <select id="annCategory" class="soft-input">
+                        <option value="Important">Important</option>
+                        <option value="General">General Update</option>
+                        <option value="Event">Network Event</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message Content:</label>
+                    <textarea id="annContent" class="soft-input" rows="4" placeholder="Write announcement text..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cta-btn secondary" onclick="toggleAnnouncementModal(false)">Cancel</button>
+                    <button type="submit" class="cta-btn primary">Publish Announcement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. MODAL: ASSIGN TASK (Admin Only) -->
+    <div class="modal-overlay" id="taskModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-list-check"></i> Assign New Task</h3>
+                <button class="action-btn" onclick="toggleTaskModal(false)">&times;</button>
+            </div>
+            <form onsubmit="handleAddTask(event)">
+                <div class="form-group">
+                    <label>Task Title:</label>
+                    <input type="text" id="taskTitle" class="soft-input" placeholder="e.g. Update Spawn Rules Signs" required>
+                </div>
+                <div class="form-group">
+                    <label>Assign To:</label>
+                    <input type="text" id="taskAssignee" class="soft-input" placeholder="e.g. Helper or Username" required>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="taskDesc" class="soft-input" rows="3" placeholder="Task details..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cta-btn secondary" onclick="toggleTaskModal(false)">Cancel</button>
+                    <button type="submit" class="cta-btn primary">Assign Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. MODAL: ADD STAFF ACCOUNT (Admin Only) -->
+    <div class="modal-overlay" id="addUserModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-plus"></i> Add New Staff Member</h3>
+                <button class="action-btn" onclick="toggleAddUserModal(false)">&times;</button>
+            </div>
+            <form onsubmit="handleAddUser(event)">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="newUsername" class="soft-input" required placeholder="Minecraft Username">
+                </div>
+                <div class="form-group">
+                    <label>Temporary Password:</label>
+                    <input type="password" id="newPassword" class="soft-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Role:</label>
+                    <select id="newRole" class="soft-input">
+                        <option value="Helper">Helper</option>
+                        <option value="Moderator">Moderator</option>
+                        <option value="Admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cta-btn secondary" onclick="toggleAddUserModal(false)">Cancel</button>
+                    <button type="submit" class="cta-btn primary">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT LOGICA
+         ========================================== -->
+    <script>
+        // SECURITY & RBAC LOGIC
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        const username = sessionStorage.getItem('username') || 'Staff';
+        const userRole = sessionStorage.getItem('userRole') || 'Helper';
+        const isAdmin = (userRole === 'Admin' || username === 'J33lF');
+
+        // Apply RBAC Rules
+        if (isAdmin) {
+            document.getElementById('adminSection').style.display = 'flex';
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'inline-flex');
+        }
+
+        document.getElementById('welcomeUser').innerText = username;
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        function switchTab(tabId, el) {
+            if (tabId.startsWith('admin-') && !isAdmin) {
+                alert('Access denied: Administrator privileges required.');
+                return;
+            }
+
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+
+            document.getElementById('tab-' + tabId).style.display = 'block';
+            if (el) el.classList.add('active');
+
+            if (tabId === 'announcements') renderAnnouncements();
+            if (tabId === 'tasks') renderTasks();
+            if (tabId === 'notices') renderNotices();
+            if (tabId === 'docs') renderDocs();
+            if (tabId === 'profile') renderProfile();
+            if (tabId === 'admin-staff') renderStaffTable();
+        }
+
+        // ANNOUNCEMENTS SYSTEM
+        function toggleAnnouncementModal(show) { document.getElementById('announcementModal').style.display = show ? 'flex' : 'none'; }
+        function getAnnouncements() { return JSON.parse(localStorage.getItem('tl_announcements')) || []; }
+
+        function renderAnnouncements() {
+            const container = document.getElementById('announcementsContainer');
+            container.innerHTML = '';
+            const list = getAnnouncements();
+            if (list.length === 0) {
+                container.innerHTML = '<div class="glass-card" style="color: var(--text-muted);">No announcements published yet.</div>';
+                return;
+            }
+            list.forEach(a => {
+                container.innerHTML += `
+                    <div class="glass-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4>${a.title}</h4>
+                            <span class="soft-pill orange">${a.category}</span>
+                        </div>
+                        <p style="color: var(--text-body); font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px;">${a.content}</p>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Posted by <strong>${a.author}</strong> on ${a.date}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function handleAddAnnouncement(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+            const list = getAnnouncements();
+            list.unshift({
+                id: Date.now(),
+                title: document.getElementById('annTitle').value,
+                category: document.getElementById('annCategory').value,
+                content: document.getElementById('annContent').value,
+                author: username,
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('tl_announcements', JSON.stringify(list));
+            toggleAnnouncementModal(false);
+            renderAnnouncements();
+        }
+
+        // TASKS SYSTEM
+        function toggleTaskModal(show) { document.getElementById('taskModal').style.display = show ? 'flex' : 'none'; }
+        function getTasks() { return JSON.parse(localStorage.getItem('tl_tasks')) || []; }
+
+        function renderTasks() {
+            const grid = document.getElementById('tasksGrid');
+            grid.innerHTML = '';
+            const list = getTasks();
+            if (list.length === 0) {
+                grid.innerHTML = '<div class="glass-card" style="grid-column: 1/-1; color: var(--text-muted);">No pending tasks.</div>';
+                return;
+            }
+            list.forEach(t => {
+                grid.innerHTML += `
+                    <div class="glass-card task-card">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4>${t.title}</h4>
+                                <span class="soft-pill blue">${t.assignee}</span>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">${t.desc}</p>
+                        </div>
+                        ${isAdmin ? `<button class="action-btn delete-btn" onclick="deleteTask(${t.id})"><i class="fa-solid fa-trash"></i> Complete / Delete</button>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function handleAddTask(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+            const list = getTasks();
+            list.unshift({
+                id: Date.now(),
+                title: document.getElementById('taskTitle').value,
+                assignee: document.getElementById('taskAssignee').value,
+                desc: document.getElementById('taskDesc').value
+            });
+            localStorage.setItem('tl_tasks', JSON.stringify(list));
+            toggleTaskModal(false);
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            let list = getTasks().filter(t => t.id !== id);
+            localStorage.setItem('tl_tasks', JSON.stringify(list));
+            renderTasks();
+        }
+
+        // ABSENCE NOTICES
+        function toggleNoticeModal(show) { document.getElementById('noticeModal').style.display = show ? 'flex' : 'none'; }
+        function getNotices() { return JSON.parse(localStorage.getItem('tl_notices')) || []; }
+
+        function renderNotices() {
+            const tbody = document.getElementById('noticesTableBody');
+            tbody.innerHTML = '';
+            getNotices().forEach(n => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${n.author}</strong></td>
+                        <td><span class="soft-pill orange">${n.type}</span></td>
+                        <td>${n.dates}</td>
+                        <td>${n.desc}</td>
+                        <td>${(n.author === username || isAdmin) ? `<button class="action-btn delete-btn" onclick="deleteNotice(${n.id})"><i class="fa-solid fa-trash"></i></button>` : ''}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function handleAddNotice(e) {
+            e.preventDefault();
+            const notices = getNotices();
+            notices.unshift({
+                id: Date.now(),
+                author: username,
+                type: document.getElementById('noticeType').value,
+                dates: `${document.getElementById('noticeStartDate').value} till ${document.getElementById('noticeEndDate').value}`,
+                desc: document.getElementById('noticeDesc').value
+            });
+            localStorage.setItem('tl_notices', JSON.stringify(notices));
+            toggleNoticeModal(false);
+            renderNotices();
+        }
+
+        function deleteNotice(id) {
+            let notices = getNotices().filter(n => n.id !== id);
+            localStorage.setItem('tl_notices', JSON.stringify(notices));
+            renderNotices();
+        }
+
+        // DOCS SYSTEM LOGIC
+        let currentDocFile = null;
+        function toggleDocModal(show) { document.getElementById('docModal').style.display = show ? 'flex' : 'none'; }
+        
+        function handleDocFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    currentDocFile = { name: file.name, data: evt.target.result };
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function getDocs() {
+            return JSON.parse(localStorage.getItem('tl_docs')) || [
+                { id: 1, title: 'Staff Handbook v2', category: 'Handbook', author: 'J33lF', file: { name: 'handbook.pdf', data: '#' } }
+            ];
+        }
+
+        function renderDocs() {
+            const tbody = document.getElementById('docsTableBody');
+            tbody.innerHTML = '';
+            getDocs().forEach(d => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${d.title}</strong></td>
+                        <td><span class="soft-pill orange">${d.category}</span></td>
+                        <td>${d.author}</td>
+                        <td>
+                            <a href="${d.file.data}" download="${d.file.name}" class="cta-btn secondary" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fa-solid fa-download"></i> Download</a>
+                            ${isAdmin ? `<button class="action-btn delete-btn" onclick="deleteDoc(${d.id})"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function handleUploadDoc(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+            const docs = getDocs();
+            docs.unshift({
+                id: Date.now(),
+                title: document.getElementById('docTitle').value,
+                category: document.getElementById('docCategory').value,
+                author: username,
+                file: currentDocFile || { name: 'document.pdf', data: '#' }
+            });
+            localStorage.setItem('tl_docs', JSON.stringify(docs));
+            toggleDocModal(false);
+            renderDocs();
+        }
+
+        function deleteDoc(id) {
+            let docs = getDocs().filter(d => d.id !== id);
+            localStorage.setItem('tl_docs', JSON.stringify(docs));
+            renderDocs();
+        }
+
+        // PROFILE & AVATAR UPLOAD LOGIC
+        function triggerAvatarUpload() { document.getElementById('avatarFileInput').click(); }
+
+        function handleAvatarUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const base64 = evt.target.result;
+                    document.getElementById('profileAvatarImg').src = base64;
+                    let profiles = JSON.parse(localStorage.getItem('tl_profiles')) || {};
+                    if (!profiles[username]) profiles[username] = {};
+                    profiles[username].avatar = base64;
+                    localStorage.setItem('tl_profiles', JSON.stringify(profiles));
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function renderProfile() {
+            document.getElementById('profUserCard').innerText = username;
+            document.getElementById('profRoleBadge').innerText = userRole;
+            let profiles = JSON.parse(localStorage.getItem('tl_profiles')) || {};
+            if (profiles[username] && profiles[username].avatar) {
+                document.getElementById('profileAvatarImg').src = profiles[username].avatar;
+            }
+            document.getElementById('profileJoinDate').value = '2026-01-01';
+            document.getElementById('profileDept').value = isAdmin ? 'Administration' : 'General Staff';
+        }
+
+        function saveProfileDetails(e) {
+            e.preventDefault();
+            alert('Profile details saved successfully!');
+        }
+
+        // DISCORD BOT MANAGEMENT
+        async function controlBot(action) {
+            if (!isAdmin) return alert('Unauthorized');
+            alert(`Bot action sent: ${action.toUpperCase()}`);
+        }
+
+        async function toggleModule(moduleName, enabled) {
+            if (!isAdmin) return alert('Unauthorized');
+            const badge = document.getElementById(`status-${moduleName}`);
+            if (badge) {
+                badge.innerText = enabled ? 'Active' : 'Disabled';
+                badge.className = enabled ? 'soft-pill orange' : 'soft-pill';
+            }
+            alert(`Module '${moduleName}' is now ${enabled ? 'Enabled' : 'Disabled'}`);
+        }
+
+        async function sendBotMessage(e) {
+            e.preventDefault();
+            if (!isAdmin) return alert('Unauthorized');
+            const channelId = document.getElementById('botChannelId').value;
+            alert(`Successfully sent message to Discord channel: ${channelId}`);
+            document.getElementById('botMessageContent').value = '';
+        }
+
+        // STAFF MANAGEMENT LOGIC
+        function toggleAddUserModal(show) { document.getElementById('addUserModal').style.display = show ? 'flex' : 'none'; }
+        
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('timelapse_users')) || [
+                { username: 'J33lF', password: '123', role: 'Admin', status: 'Active', created: '2026-01-01' }
+            ];
+        }
+
+        function renderStaffTable() {
+            const tbody = document.getElementById('staffTableBody');
+            tbody.innerHTML = '';
+            const users = getUsers();
+            if (document.getElementById('widgetStaffCount')) {
+                document.getElementById('widgetStaffCount').innerText = users.length;
+            }
+            users.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${u.username}</strong></td>
+                        <td><span class="soft-pill orange">${u.role}</span></td>
+                        <td><span class="status-badge active">${u.status}</span></td>
+                        <td>${u.created}</td>
+                        <td>${u.username !== 'J33lF' ? `<button class="action-btn delete-btn" onclick="deleteUser('${u.username}')"><i class="fa-solid fa-trash"></i></button>` : '<em>Owner</em>'}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function handleAddUser(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+            const users = getUsers();
+            users.push({
+                username: document.getElementById('newUsername').value.trim(),
+                password: document.getElementById('newPassword').value,
+                role: document.getElementById('newRole').value,
+                status: 'Active',
+                created: new Date().toISOString().split('T')[0]
+            });
+            localStorage.setItem('timelapse_users', JSON.stringify(users));
+            toggleAddUserModal(false);
+            renderStaffTable();
+        }
+
+        function deleteUser(uName) {
+            if (!isAdmin) return;
+            let users = getUsers().filter(u => u.username !== uName);
+            localStorage.setItem('timelapse_users', JSON.stringify(users));
+            renderStaffTable();
+        }
+
+        // Initialize widget counters on page load
+        if (document.getElementById('widgetStaffCount')) {
+            document.getElementById('widgetStaffCount').innerText = getUsers().length;
+        }
+    </script>
+</body>
+</html>

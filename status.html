@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimelapsePVP Status</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="status-body-bg">
+    
+    <!-- Top Header -->
+    <header class="status-header-nav">
+        <div class="logo">
+            <a href="index.html" class="logo-link">
+                <span class="logo-accent">TIMELAPSE</span><span class="logo-tag">PVP</span>
+            </a>
+        </div>
+        <div class="status-header-right">
+            <a href="https://discord.gg/eNEbkYjQvQ" target="_blank" class="nav-link">Discord</a>
+            <button class="get-updates-btn">Get updates <i class="fa-solid fa-chevron-down"></i></button>
+        </div>
+    </header>
+
+    <main class="status-container">
+        <!-- Main Status Banner -->
+        <div class="system-banner" id="overall-banner">
+            <i class="fa-solid fa-circle-notch fa-spin banner-icon" id="banner-icon"></i>
+            <span id="overall-text">Checking system status...</span>
+        </div>
+
+        <!-- Systems Card -->
+        <div class="status-dashboard-card">
+            
+            <!-- Service 1: Minecraft Server -->
+            <div class="service-row">
+                <div class="service-header">
+                    <div class="service-title">
+                        <i class="fa-solid fa-circle-check status-icon-green" id="mc-icon"></i>
+                        <span>Minecraft Server</span>
+                    </div>
+                    <span class="uptime-text" id="mc-uptime">Calculating uptime...</span>
+                </div>
+                <div class="uptime-bars" id="mc-bars"></div>
+            </div>
+
+            <!-- Service 2: Discord Server -->
+            <div class="service-row">
+                <div class="service-header">
+                    <div class="service-title">
+                        <i class="fa-solid fa-circle-check status-icon-green" id="discord-icon"></i>
+                        <span>Timelapsez Network | Discord Server</span>
+                    </div>
+                    <span class
